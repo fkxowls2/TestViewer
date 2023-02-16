@@ -45,12 +45,14 @@ namespace TestViewer
                 }
             }
 
+            // 불러온 이미지가 8개 보다 많으면 8로 지정
             listNumber = listBox1.Items.Count;
             if (listNumber > 8)
             {
                 listNumber = 8;
             }
 
+            // 이미지 로드 스레드 실행
             Thread t = new Thread(new ThreadStart(ImageLoad));
             t.IsBackground = true;
             t.Start();
@@ -63,14 +65,17 @@ namespace TestViewer
             {
                 loadStartTime = DateTime.Now;
 
+                // 이미지 리스트에 이미지 데이터 담기
                 for (int i = 0; i < listNumber; i++)
                 {
                     imageList.Add(Image.FromFile(listBox1.Items[i].ToString()));
                 }
 
                 loadEndTime = DateTime.Now;
+                // 이미지 로딩 시간 계산
                 TimeSpan duration = loadEndTime - loadStartTime;
 
+                // 이미지 로딩에 대한 정보를 메인 폼에 표시
                 Invoke(new Action(() =>
                 {
                     listBox2.Items.Add("이미지 로드 완료");
@@ -124,6 +129,7 @@ namespace TestViewer
             timeCount = 0;
             ClearPicture();
 
+            // 이미지 그리기 함수들을 리스트에 담기
             List<MyFunction> functionList = new List<MyFunction>();
             functionList.Add(Function0);
             functionList.Add(Function1);
@@ -134,16 +140,19 @@ namespace TestViewer
             functionList.Add(Function6);
             functionList.Add(Function7);
 
+            // 불러온 이미지 개수에 맞춰서 함수 실행
             for (int i = 0; i < listNumber; i++)
             {
                 functionList[i]();
             }
-
+            
+            // 이미지 그리기 스레드가 모두 끝나는 지 확인하는 스레드 실행
             Thread tCheckTimeCount = new Thread(new ThreadStart(CheckTimeCount));
             tCheckTimeCount.Start();
 
         }
 
+        // 이미지 그리기 스레드가 모두 끝나는 지 확인하는 스레드
         private void CheckTimeCount()
         {
             while (true)
@@ -329,6 +338,7 @@ namespace TestViewer
             PlusTimeCounter(startTime, endTime);
         }
 
+        // 이미지 하나 그릴 때마다 timeCount를 하나씩 증가시키는 함수
         private void PlusTimeCounter(DateTime startTime, DateTime endTime)
         {
             if (timeCount == 0)
@@ -341,6 +351,7 @@ namespace TestViewer
 
         private void button3_Click(object sender, EventArgs e)
         {
+            // 불러온 이미지 개수와 그린 개수가 일치하면 총 그리기 시간 계산 및 표시
             if (timeCount == listNumber)
             {
                 button3.Enabled = false;
@@ -356,6 +367,7 @@ namespace TestViewer
 
         private void button4_Click(object sender, EventArgs e)
         {
+            // 상태창 지우기
             listBox2.Items.Clear();
         }
     }
