@@ -78,7 +78,7 @@ namespace TestViewer
                     button2.Enabled = true;
                 }));
             }
-            catch 
+            catch
             {
                 Invoke(new Action(() =>
                 {
@@ -110,7 +110,7 @@ namespace TestViewer
             pictureBox7.Image = null;
             pictureBox0.Refresh();
             pictureBox1.Refresh();
-            pictureBox2.Refresh();    
+            pictureBox2.Refresh();
             pictureBox3.Refresh();
             pictureBox4.Refresh();
             pictureBox5.Refresh();
@@ -317,8 +317,8 @@ namespace TestViewer
 
         private void Draw7()
         {
-            DateTime startTime  = DateTime.Now;
-            
+            DateTime startTime = DateTime.Now;
+
             Invoke(new Action(() =>
             {
                 pictureBox7.Image = imageList[7];
@@ -331,11 +331,11 @@ namespace TestViewer
 
         private void PlusTimeCounter(DateTime startTime, DateTime endTime)
         {
-            if(timeCount == 0)
+            if (timeCount == 0)
             {
                 drawStartTime = startTime;
             }
-            drawEndTime= endTime;
+            drawEndTime = endTime;
             timeCount++;
         }
 
