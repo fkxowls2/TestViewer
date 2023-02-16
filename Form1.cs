@@ -11,19 +11,11 @@ namespace TestViewer
         private delegate void MyFunction();
         private List<Image> imageList = new List<Image>();
         private int listNumber;
+        private int timeCount = 0;
         private DateTime loadStartTime;
         private DateTime loadEndTime;
         private DateTime drawStartTime;
         private DateTime drawEndTime;
-        private int timeCount = 0;
-        private Thread t0;
-        private Thread t1;
-        private Thread t2;
-        private Thread t3;
-        private Thread t4;
-        private Thread t5;
-        private Thread t6;
-        private Thread t7;
 
         public Form1()
         {
@@ -68,30 +60,43 @@ namespace TestViewer
 
         private void ImageLoad()
         {
-            loadStartTime = DateTime.Now;
-            
-            for (int i = 0; i < listNumber; i++)
+            try
             {
-                imageList.Add(Image.FromFile(listBox1.Items[i].ToString()));
+                loadStartTime = DateTime.Now;
+
+                for (int i = 0; i < listNumber; i++)
+                {
+                    imageList.Add(Image.FromFile(listBox1.Items[i].ToString()));
+                }
+
+                loadEndTime = DateTime.Now;
+                TimeSpan duration = loadEndTime - loadStartTime;
+
+                Invoke(new Action(() =>
+                {
+                    listBox2.Items.Add("이미지 로드 완료");
+                    listBox2.Items.Add($"이미지 로드 시간: {duration.TotalMilliseconds}ms");
+                    button2.Enabled = true;
+                }));
             }
-
-            loadEndTime = DateTime.Now;
-            TimeSpan duration = loadEndTime - loadStartTime;
-
-            Invoke(new Action(() =>
+            catch 
             {
-                listBox2.Items.Add("이미지 로드 완료");
-                listBox2.Items.Add($"이미지 로드 시간: {duration.TotalMilliseconds} ms");
-                button2.Enabled = true;
-            }));
+                Invoke(new Action(() =>
+                {
+                    listBox2.Items.Add("이미지 용량 초과!!!!!");
+                }));
+            }
         }
 
         private void ClearAll()
         {
+            button2.Enabled = false;
+            button3.Enabled = false;
             listBox1.Items.Clear();
             imageList.Clear();
+            timeCount = 0;
             ClearPicture();
-            GC.Collect(0);
+            GC.Collect();
         }
 
         private void ClearPicture()
@@ -117,6 +122,8 @@ namespace TestViewer
         private void button2_Click(object sender, EventArgs e)
         {
             button2.Enabled = false;
+            timeCount = 0;
+            ClearPicture();
 
             List<MyFunction> functionList = new List<MyFunction>();
             functionList.Add(Function0);
@@ -128,14 +135,32 @@ namespace TestViewer
             functionList.Add(Function6);
             functionList.Add(Function7);
 
-            timeCount = 0;
-            ClearPicture();
-
+            listBox2.Items.Add("이미지 그리기 시작");
             for (int i = 0; i < listNumber; i++)
             {
                 functionList[i]();
             }
-            button3.Enabled = true;
+
+            Thread tCheckTimeCount = new Thread(new ThreadStart(CheckTimeCount));
+            tCheckTimeCount.Start();
+
+        }
+
+        private void CheckTimeCount()
+        {
+            while (true)
+            {
+                if (timeCount == listNumber)
+                {
+                    Thread.Sleep(2000);
+                    Invoke(new Action(() =>
+                    {
+                        listBox2.Items.Add("이미지 그리기 완료");
+                        button3.Enabled = true;
+                    }));
+                    break;
+                }
+            }
         }
 
         private void Function0()
@@ -205,7 +230,7 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw1()
@@ -219,7 +244,7 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw2()
@@ -233,7 +258,7 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw3()
@@ -247,7 +272,7 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw4()
@@ -261,7 +286,7 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw5()
@@ -275,7 +300,7 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw6()
@@ -289,7 +314,7 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw7()
@@ -303,10 +328,10 @@ namespace TestViewer
             }));
 
             DateTime endTime = DateTime.Now;
-            DrawTimeCounter(startTime, endTime);
+            PlusTimeCounter(startTime, endTime);
         }
 
-        private void DrawTimeCounter(DateTime startTime, DateTime endTime)
+        private void PlusTimeCounter(DateTime startTime, DateTime endTime)
         {
             if(timeCount == 0)
             {
@@ -318,24 +343,22 @@ namespace TestViewer
 
         private void button3_Click(object sender, EventArgs e)
         {
-            while (true)
+            if (timeCount == listNumber)
             {
-                if (timeCount == listNumber)
-                {
-                    button3.Enabled = false;
-                    TimeSpan duration = drawEndTime - drawStartTime;
-                    listBox2.Items.Add($"Draw 총 시간: {duration.TotalMilliseconds} ms");
-                    timeCount = 0;
-                    Thread.Sleep(1000);
-                    button2.Enabled = true;
-                    break;
-                }
-                else
-                {
-                    listBox2.Items.Add("아직 Drwaing이 끝나지 않았습니다.");
-                    break;
-                }
+                button3.Enabled = false;
+                TimeSpan duration = drawEndTime - drawStartTime;
+                listBox2.Items.Add($"##### 그리기 총 시간: {duration.TotalMilliseconds}ms #####");
+                button2.Enabled = true;
             }
+            else
+            {
+                listBox2.Items.Add("아직 Drwaing이 끝나지 않았습니다.");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            listBox2.Items.Clear();
         }
     }
 }
