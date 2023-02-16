@@ -53,7 +53,6 @@ namespace TestViewer
 
             Thread t = new Thread(new ThreadStart(ImageLoad));
             t.IsBackground = true;
-            listBox2.Items.Add("이미지 로드 시작");
             t.Start();
 
         }
@@ -135,7 +134,6 @@ namespace TestViewer
             functionList.Add(Function6);
             functionList.Add(Function7);
 
-            listBox2.Items.Add("이미지 그리기 시작");
             for (int i = 0; i < listNumber; i++)
             {
                 functionList[i]();
