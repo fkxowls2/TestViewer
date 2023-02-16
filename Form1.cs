@@ -16,6 +16,14 @@ namespace TestViewer
         private DateTime drawStartTime;
         private DateTime drawEndTime;
         private int timeCount = 0;
+        private Thread t0;
+        private Thread t1;
+        private Thread t2;
+        private Thread t3;
+        private Thread t4;
+        private Thread t5;
+        private Thread t6;
+        private Thread t7;
 
         public Form1()
         {
@@ -120,6 +128,7 @@ namespace TestViewer
             functionList.Add(Function6);
             functionList.Add(Function7);
 
+            timeCount = 0;
             ClearPicture();
 
             for (int i = 0; i < listNumber; i++)
@@ -309,18 +318,23 @@ namespace TestViewer
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (timeCount == listNumber)
+            while (true)
             {
-                button3.Enabled = false;
-                TimeSpan duration = drawEndTime - drawStartTime;
-                listBox2.Items.Add($"Draw 총 시간: {duration.TotalMilliseconds} ms");
-                timeCount = 0;
-                Thread.Sleep(2000);
-                button2.Enabled = true;
-            }
-            else
-            {
-                listBox2.Items.Add("아직 Drwaing이 끝나지 않았습니다.");
+                if (timeCount == listNumber)
+                {
+                    button3.Enabled = false;
+                    TimeSpan duration = drawEndTime - drawStartTime;
+                    listBox2.Items.Add($"Draw 총 시간: {duration.TotalMilliseconds} ms");
+                    timeCount = 0;
+                    Thread.Sleep(1000);
+                    button2.Enabled = true;
+                    break;
+                }
+                else
+                {
+                    listBox2.Items.Add("아직 Drwaing이 끝나지 않았습니다.");
+                    break;
+                }
             }
         }
     }
