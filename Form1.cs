@@ -16,6 +16,7 @@ namespace TestViewer
         private DateTime loadEndTime;
         private DateTime drawStartTime;
         private DateTime drawEndTime;
+        private object lockObject = new object();
 
         public Form1()
         {
@@ -145,7 +146,7 @@ namespace TestViewer
             {
                 functionList[i]();
             }
-            
+
             // 이미지 그리기 스레드가 모두 끝나는 지 확인하는 스레드 실행
             Thread tCheckTimeCount = new Thread(new ThreadStart(CheckTimeCount));
             tCheckTimeCount.Start();
@@ -341,12 +342,15 @@ namespace TestViewer
         // 이미지 하나 그릴 때마다 timeCount를 하나씩 증가시키는 함수
         private void PlusTimeCounter(DateTime startTime, DateTime endTime)
         {
-            if (timeCount == 0)
+            lock(lockObject)
             {
-                drawStartTime = startTime;
+                if (timeCount == 0)
+                {
+                    drawStartTime = startTime;
+                }
+                drawEndTime = endTime;
+                timeCount++;
             }
-            drawEndTime = endTime;
-            timeCount++;
         }
 
         private void button3_Click(object sender, EventArgs e)
