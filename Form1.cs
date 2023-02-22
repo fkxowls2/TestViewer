@@ -17,10 +17,24 @@ namespace TestViewer
         private DateTime drawStartTime;
         private DateTime drawEndTime;
         private object lockObject = new object();
+        private List<PictureBox> pictureBoxes = new List<PictureBox>();
+
+        private void MakePictureBoxList()
+        {
+            pictureBoxes.Add(pictureBox0);
+            pictureBoxes.Add(pictureBox1);
+            pictureBoxes.Add(pictureBox2);
+            pictureBoxes.Add(pictureBox3);
+            pictureBoxes.Add(pictureBox4);
+            pictureBoxes.Add(pictureBox5);
+            pictureBoxes.Add(pictureBox6);
+            pictureBoxes.Add(pictureBox7);
+        }
 
         public Form1()
         {
             InitializeComponent();
+            MakePictureBoxList();
         }
 
         private void button1_Click(object sender, EventArgs e)
