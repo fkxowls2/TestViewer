@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -21,6 +20,7 @@ namespace TestViewer
         private DateTime drawEndTime;
         private object lockObject = new object();
 
+        #region 리스트와 이벤트 선언
         private void MakeList()
         {
             pictureBoxes.Add(pictureBox0);
@@ -41,16 +41,78 @@ namespace TestViewer
             functionList.Add(Function7);
         }
 
+        // for문 사용하면 인덱스 아웃 오류나서 하드코딩함
+        private void ApplyEvent()
+        {
+            pictureBoxes[0].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[0].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+            pictureBoxes[1].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[1].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+            pictureBoxes[2].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[2].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+            pictureBoxes[3].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[3].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+            pictureBoxes[4].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[4].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+            pictureBoxes[5].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[5].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+            pictureBoxes[6].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[6].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+            pictureBoxes[7].Paint += (sender, e) =>
+            {
+                if (pictureBoxes[7].Image != null)
+                {
+                    PlusTimeCounter();
+                }
+            };
+        }
+        #endregion
+
         public Form1()
         {
             InitializeComponent();
             MakeList();
+            ApplyEvent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             ClearAll();
-
             // OpenFileDialog 생성
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
@@ -132,7 +194,7 @@ namespace TestViewer
         {
             for (int i = 0; i < 8; i++)
             {
-                pictureBoxes[i].Image= null;
+                pictureBoxes[i].Image = null;
                 pictureBoxes[i].Refresh();
             }
         }
@@ -174,6 +236,7 @@ namespace TestViewer
             }
         }
 
+        #region Function 함수 선언(for문 사용시 인덱스 아웃 에러로 하드코딩)
         private void Function0()
         {
             Thread t0 = new Thread(new ThreadStart(() => Draw(0)));
@@ -229,6 +292,7 @@ namespace TestViewer
             t7.IsBackground = true;
             t7.Start();
         }
+        #endregion
 
         private void Draw(int listNumber)
         {
@@ -236,14 +300,13 @@ namespace TestViewer
             {
                 pictureBoxes[listNumber].Image = imageList[listNumber];
                 pictureBoxes[listNumber].SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
             }));
         }
 
         // 이미지 하나 그릴 때마다 timeCount를 하나씩 증가시키는 함수
         private void PlusTimeCounter()
         {
-            lock(lockObject)
+            lock (lockObject)
             {
                 drawEndTime = DateTime.Now;
                 timeCount++;
