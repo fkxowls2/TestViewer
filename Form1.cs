@@ -9,6 +9,8 @@ namespace TestViewer
     public partial class Form1 : Form
     {
         private delegate void MyFunction();
+        private List<MyFunction> functionList = new List<MyFunction>();
+        private List<PictureBox> pictureBoxes = new List<PictureBox>();
         private List<Image> imageList = new List<Image>();
         private int listNumber;
         private int timeCount = 0;
@@ -17,9 +19,8 @@ namespace TestViewer
         private DateTime drawStartTime;
         private DateTime drawEndTime;
         private object lockObject = new object();
-        private List<PictureBox> pictureBoxes = new List<PictureBox>();
 
-        private void MakePictureBoxList()
+        private void MakeList()
         {
             pictureBoxes.Add(pictureBox0);
             pictureBoxes.Add(pictureBox1);
@@ -29,12 +30,20 @@ namespace TestViewer
             pictureBoxes.Add(pictureBox5);
             pictureBoxes.Add(pictureBox6);
             pictureBoxes.Add(pictureBox7);
+            functionList.Add(Function0);
+            functionList.Add(Function1);
+            functionList.Add(Function2);
+            functionList.Add(Function3);
+            functionList.Add(Function4);
+            functionList.Add(Function5);
+            functionList.Add(Function6);
+            functionList.Add(Function7);
         }
 
         public Form1()
         {
             InitializeComponent();
-            MakePictureBoxList();
+            MakeList();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -133,17 +142,6 @@ namespace TestViewer
             timeCount = 0;
             ClearPicture();
 
-            // 이미지 그리기 함수들을 리스트에 담기
-            List<MyFunction> functionList = new List<MyFunction>();
-            functionList.Add(Function0);
-            functionList.Add(Function1);
-            functionList.Add(Function2);
-            functionList.Add(Function3);
-            functionList.Add(Function4);
-            functionList.Add(Function5);
-            functionList.Add(Function6);
-            functionList.Add(Function7);
-
             drawStartTime = DateTime.Now;
             // 불러온 이미지 개수에 맞춰서 함수 실행
             for (int i = 0; i < listNumber; i++)
@@ -177,150 +175,66 @@ namespace TestViewer
 
         private void Function0()
         {
-            Thread t0 = new Thread(new ThreadStart(Draw0));
+            Thread t0 = new Thread(new ThreadStart(() => Draw(0)));
             t0.IsBackground = true;
             t0.Start();
         }
 
         private void Function1()
         {
-            Thread t1 = new Thread(new ThreadStart(Draw1));
+            Thread t1 = new Thread(new ThreadStart(() => Draw(1)));
             t1.IsBackground = true;
             t1.Start();
         }
 
         private void Function2()
         {
-            Thread t2 = new Thread(new ThreadStart(Draw2));
+            Thread t2 = new Thread(new ThreadStart(() => Draw(2)));
             t2.IsBackground = true;
             t2.Start();
         }
 
         private void Function3()
         {
-            Thread t3 = new Thread(new ThreadStart(Draw3));
+            Thread t3 = new Thread(new ThreadStart(() => Draw(3)));
             t3.IsBackground = true;
             t3.Start();
         }
 
         private void Function4()
         {
-            Thread t4 = new Thread(new ThreadStart(Draw4));
+            Thread t4 = new Thread(new ThreadStart(() => Draw(4)));
             t4.IsBackground = true;
             t4.Start();
         }
 
         private void Function5()
         {
-            Thread t5 = new Thread(new ThreadStart(Draw5));
+            Thread t5 = new Thread(new ThreadStart(() => Draw(5)));
             t5.IsBackground = true;
             t5.Start();
         }
 
         private void Function6()
         {
-            Thread t6 = new Thread(new ThreadStart(Draw6));
+            Thread t6 = new Thread(new ThreadStart(() => Draw(6)));
             t6.IsBackground = true;
             t6.Start();
         }
 
         private void Function7()
         {
-            Thread t7 = new Thread(new ThreadStart(Draw7));
+            Thread t7 = new Thread(new ThreadStart(() => Draw(7)));
             t7.IsBackground = true;
             t7.Start();
         }
 
-        private void Draw0()
+        private void Draw(int listNumber)
         {
             Invoke(new Action(() =>
             {
-                pictureBox0.Image = imageList[0];
-                pictureBox0.SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
-            }));
-        }
-
-        private void Draw1()
-        {
-            DateTime startTime = DateTime.Now;
-
-            Invoke(new Action(() =>
-            {
-                pictureBox1.Image = imageList[1];
-                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
-            }));
-        }
-
-        private void Draw2()
-        {
-            DateTime startTime = DateTime.Now;
-
-            Invoke(new Action(() =>
-            {
-                pictureBox2.Image = imageList[2];
-                pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
-            }));
-        }
-
-        private void Draw3()
-        {
-            DateTime startTime = DateTime.Now;
-
-            Invoke(new Action(() =>
-            {
-                pictureBox3.Image = imageList[3];
-                pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
-            }));
-        }
-
-        private void Draw4()
-        {
-            DateTime startTime = DateTime.Now;
-
-            Invoke(new Action(() =>
-            {
-                pictureBox4.Image = imageList[4];
-                pictureBox4.SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
-            }));
-        }
-
-        private void Draw5()
-        {
-            DateTime startTime = DateTime.Now;
-
-            Invoke(new Action(() =>
-            {
-                pictureBox5.Image = imageList[5];
-                pictureBox5.SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
-            }));
-        }
-
-        private void Draw6()
-        {
-            DateTime startTime = DateTime.Now;
-
-            Invoke(new Action(() =>
-            {
-                pictureBox6.Image = imageList[6];
-                pictureBox6.SizeMode = PictureBoxSizeMode.Zoom;
-                PlusTimeCounter();
-            }));
-        }
-
-        private void Draw7()
-        {
-            DateTime startTime = DateTime.Now;
-
-            Invoke(new Action(() =>
-            {
-                pictureBox7.Image = imageList[7];
-                pictureBox7.SizeMode = PictureBoxSizeMode.Zoom;
+                pictureBoxes[listNumber].Image = imageList[listNumber];
+                pictureBoxes[listNumber].SizeMode = PictureBoxSizeMode.Zoom;
                 PlusTimeCounter();
             }));
         }
