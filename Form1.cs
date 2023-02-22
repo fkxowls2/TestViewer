@@ -141,6 +141,7 @@ namespace TestViewer
             functionList.Add(Function6);
             functionList.Add(Function7);
 
+            drawStartTime = DateTime.Now;
             // 불러온 이미지 개수에 맞춰서 함수 실행
             for (int i = 0; i < listNumber; i++)
             {
@@ -229,16 +230,12 @@ namespace TestViewer
 
         private void Draw0()
         {
-            DateTime startTime = DateTime.Now;
-
             Invoke(new Action(() =>
             {
                 pictureBox0.Image = imageList[0];
                 pictureBox0.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw1()
@@ -249,10 +246,8 @@ namespace TestViewer
             {
                 pictureBox1.Image = imageList[1];
                 pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw2()
@@ -263,10 +258,8 @@ namespace TestViewer
             {
                 pictureBox2.Image = imageList[2];
                 pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw3()
@@ -277,10 +270,8 @@ namespace TestViewer
             {
                 pictureBox3.Image = imageList[3];
                 pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw4()
@@ -291,10 +282,8 @@ namespace TestViewer
             {
                 pictureBox4.Image = imageList[4];
                 pictureBox4.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw5()
@@ -305,10 +294,8 @@ namespace TestViewer
             {
                 pictureBox5.Image = imageList[5];
                 pictureBox5.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw6()
@@ -319,10 +306,8 @@ namespace TestViewer
             {
                 pictureBox6.Image = imageList[6];
                 pictureBox6.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         private void Draw7()
@@ -333,22 +318,16 @@ namespace TestViewer
             {
                 pictureBox7.Image = imageList[7];
                 pictureBox7.SizeMode = PictureBoxSizeMode.Zoom;
+                PlusTimeCounter();
             }));
-
-            DateTime endTime = DateTime.Now;
-            PlusTimeCounter(startTime, endTime);
         }
 
         // 이미지 하나 그릴 때마다 timeCount를 하나씩 증가시키는 함수
-        private void PlusTimeCounter(DateTime startTime, DateTime endTime)
+        private void PlusTimeCounter()
         {
             lock(lockObject)
             {
-                if (timeCount == 0)
-                {
-                    drawStartTime = startTime;
-                }
-                drawEndTime = endTime;
+                drawEndTime = DateTime.Now;
                 timeCount++;
             }
         }
