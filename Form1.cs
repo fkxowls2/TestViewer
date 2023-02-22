@@ -120,22 +120,11 @@ namespace TestViewer
 
         private void ClearPicture()
         {
-            pictureBox0.Image = null;
-            pictureBox1.Image = null;
-            pictureBox2.Image = null;
-            pictureBox3.Image = null;
-            pictureBox4.Image = null;
-            pictureBox5.Image = null;
-            pictureBox6.Image = null;
-            pictureBox7.Image = null;
-            pictureBox0.Refresh();
-            pictureBox1.Refresh();
-            pictureBox2.Refresh();
-            pictureBox3.Refresh();
-            pictureBox4.Refresh();
-            pictureBox5.Refresh();
-            pictureBox6.Refresh();
-            pictureBox7.Refresh();
+            for (int i = 0; i < 8; i++)
+            {
+                pictureBoxes[i].Image= null;
+                pictureBoxes[i].Refresh();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
